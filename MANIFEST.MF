@@ -1,0 +1,2 @@
+Main-Class: PlayLevelStr
+Class-Path: lib/gson-2.13.1.jar

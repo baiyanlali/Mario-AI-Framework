@@ -7,7 +7,7 @@ import engine.helper.GameStatus;
 import engine.helper.SpriteType;
 
 public class MarioResult {
-    private MarioWorld world;
+    public MarioWorld world;
     private ArrayList<MarioEvent> gameEvents;
     private ArrayList<MarioAgentEvent> agentEvents;
 
