@@ -1,11 +1,12 @@
 package agents.robinBaumgarten;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import engine.core.MarioForwardModel;
 import engine.helper.GameStatus;
 
-public class SearchNode {
+public class SearchNode{
     public int timeElapsed = 0;
     public float remainingTimeEstimated = 0;
     public float remainingTime = 0;

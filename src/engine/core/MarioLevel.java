@@ -2,6 +2,7 @@ package engine.core;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import engine.graphics.MarioImage;
 import engine.graphics.MarioTilemap;
@@ -19,7 +20,7 @@ public class MarioLevel {
     public int marioTileX, marioTileY, exitTileX, exitTileY;
 
     private int[][] levelTiles;
-    private SpriteType[][] spriteTemplates;
+    public SpriteType[][] spriteTemplates;
     private int[][] lastSpawnTime;
     private MarioTilemap graphics;
     private MarioImage flag;
@@ -281,13 +282,11 @@ public class MarioLevel {
         level.marioTileY = this.marioTileY;
         level.exitTileX = this.exitTileX;
         level.exitTileY = this.exitTileY;
-        level.levelTiles = new int[this.levelTiles.length][this.levelTiles[0].length];
-        level.lastSpawnTime = new int[this.levelTiles.length][this.levelTiles[0].length];
-        for (int x = 0; x < level.levelTiles.length; x++) {
-            for (int y = 0; y < level.levelTiles[x].length; y++) {
-                level.levelTiles[x][y] = this.levelTiles[x][y];
-                level.lastSpawnTime[x][y] = this.lastSpawnTime[x][y];
-            }
+        level.levelTiles = this.levelTiles.clone();
+        level.lastSpawnTime = this.lastSpawnTime.clone();
+        for (int i = 0; i < level.levelTiles[0].length; i++) {
+            level.levelTiles[i] = this.levelTiles[i].clone();
+            level.lastSpawnTime[i] = this.lastSpawnTime[i].clone();
         }
         level.spriteTemplates = this.spriteTemplates;
         return level;
@@ -331,23 +330,14 @@ public class MarioLevel {
     }
 
     public SpriteType getSpriteType(int xTile, int yTile) {
-        if (xTile < 0 || yTile < 0 || xTile >= this.tileWidth || yTile >= this.tileHeight) {
-            return SpriteType.NONE;
-        }
         return this.spriteTemplates[xTile][yTile];
     }
 
     public int getLastSpawnTick(int xTile, int yTile) {
-        if (xTile < 0 || yTile < 0 || xTile > this.tileWidth - 1 || yTile > this.tileHeight - 1) {
-            return 0;
-        }
         return this.lastSpawnTime[xTile][yTile];
     }
 
     public void setLastSpawnTick(int xTile, int yTile, int tick) {
-        if (xTile < 0 || yTile < 0 || xTile > this.tileWidth - 1 || yTile > this.tileHeight - 1) {
-            return;
-        }
         this.lastSpawnTime[xTile][yTile] = tick;
     }
 

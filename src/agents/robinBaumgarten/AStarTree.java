@@ -1,6 +1,9 @@
 package agents.robinBaumgarten;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import engine.core.MarioForwardModel;
 import engine.core.MarioTimer;
@@ -101,17 +104,38 @@ public class AStarTree {
     }
 
     private SearchNode pickBestPos(ArrayList<SearchNode> posPool) {
-        SearchNode bestPos = null;
+//        SearchNode bestPos = null;
         float bestPosCost = 10000000;
-        for (SearchNode current : posPool) {
+        int bestIndex = 0;
+
+        for (int i = 0; i < posPool.size(); i++) {
+            var current = posPool.get(i);
             float currentCost = current.getRemainingTime() + current.timeElapsed * 0.90f; // slightly bias towards furthest positions
             if (currentCost < bestPosCost) {
-                bestPos = current;
+//                bestPos = current;
                 bestPosCost = currentCost;
+                bestIndex = i;
             }
         }
-        posPool.remove(bestPos);
-        return bestPos;
+//        for (SearchNode current : posPool) {
+//            float currentCost = current.getRemainingTime() + current.timeElapsed * 0.90f; // slightly bias towards furthest positions
+//            if (currentCost < bestPosCost) {
+//                bestPos = current;
+//                bestPosCost = currentCost;
+//            }
+//        }
+//        posPool.remove(bestPos);
+//        return bestPos;
+        return posPool.remove(bestIndex);
+
+//        double max = posPool.parallelStream().mapToDouble(current->current.getRemainingTime() + current.timeElapsed * 0.90f).max().orElse(-1);
+//        return posPool.remove(0);
+//        int maxIndex = IntStream.range(0, posPool.size()).parallel()
+//                .reduce((i, j) ->
+//                        posPool.get(i).getRemainingTime() + posPool.get(i).timeElapsed  * 0.90f
+//                                > posPool.get(j).getRemainingTime() + posPool.get(j).timeElapsed  * 0.90f ? i : j)
+//                .orElse(-1);
+//        return posPool.remove(maxIndex);
     }
 
     public boolean[] optimise(MarioForwardModel model, MarioTimer timer) {

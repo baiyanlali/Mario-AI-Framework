@@ -315,14 +315,14 @@ public class MarioWorld {
         if (this.cameraX + MarioGame.width > this.level.width) {
             this.cameraX = this.level.width - MarioGame.width;
         }
-        if (this.cameraX < 0) {
+        else if (this.cameraX < 0) {
             this.cameraX = 0;
         }
         this.cameraY = this.mario.y - MarioGame.height / 2;
         if (this.cameraY + MarioGame.height > this.level.height) {
             this.cameraY = this.level.height - MarioGame.height;
         }
-        if (this.cameraY < 0) {
+        else if (this.cameraY < 0) {
             this.cameraY = 0;
         }
 
@@ -347,14 +347,24 @@ public class MarioWorld {
         this.level.update((int) cameraX, (int) cameraY);
 
         for (int x = (int) cameraX / 16 - 1; x <= (int) (cameraX + MarioGame.width) / 16 + 1; x++) {
-            for (int y = (int) cameraY / 16 - 1; y <= (int) (cameraY + MarioGame.height) / 16 + 1; y++) {
-                int dir = 0;
-                if (x * 16 + 8 > mario.x + 16)
-                    dir = -1;
-                if (x * 16 + 8 < mario.x - 16)
-                    dir = 1;
 
-                SpriteType type = level.getSpriteType(x, y);
+            int dir = 0;
+
+            if (x * 16 + 8 > mario.x + 16)
+                dir = -1;
+            else if(x * 16 + 8 < mario.x + 16)
+                dir = 1;
+
+            if(x<0 || x>= level.tileWidth)
+                continue;
+
+            for (int y = (int) cameraY / 16 - 1; y <= (int) (cameraY + MarioGame.height) / 16 + 1; y++) {
+
+                if(y<0 || y>= level.tileHeight)
+                    continue;
+
+                SpriteType type = level.spriteTemplates[x][y];
+//                SpriteType type = level.getSpriteType(x, y);
                 if (type != SpriteType.NONE) {
                     String spriteCode = level.getSpriteCode(x, y);
                     boolean found = false;
@@ -375,11 +385,9 @@ public class MarioWorld {
                 }
 
                 if (dir != 0) {
-                    ArrayList<TileFeature> features = TileFeature.getTileType(this.level.getBlock(x, y));
-                    if (features.contains(TileFeature.SPAWNER)) {
-                        if (this.currentTick % 100 == 0) {
-                            addSprite(new BulletBill(this.visuals, x * 16 + 8 + dir * 8, y * 16 + 15, dir));
-                        }
+                    // if features.contains(TileFeature.SPAWNER), an optimized way
+                    if(this.currentTick % 100 == 0 && this.level.getBlock(x, y) == 3){
+                        addSprite(new BulletBill(this.visuals, x * 16 + 8 + dir * 8, y * 16 + 15, dir));
                     }
                 }
             }
