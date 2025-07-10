@@ -70,6 +70,7 @@ public class Mario extends MarioSprite {
     }
 
     private boolean move(float xa, float ya) {
+//        PrintExcludeForwardModel("move");
         while (xa > 8) {
             if (!move(8, 0))
                 return false;
@@ -143,6 +144,7 @@ public class Mario extends MarioSprite {
             if (ya > 0) {
                 y = (int) ((y - 1) / 16 + 1) * 16 - 1;
                 onGround = true;
+//                PrintExcludeForwardModel("on ground = true");
             }
             return false;
         } else {
@@ -168,6 +170,7 @@ public class Mario extends MarioSprite {
         }
         if (blocking && ya < 0) {
             world.bump(xTile, yTile, isLarge);
+//            System.out.printf("bump %d %d\n", xTile, yTile);
         }
         return blocking;
     }
@@ -246,8 +249,27 @@ public class Mario extends MarioSprite {
         graphics.index = frameIndex;
     }
 
+    public void PrintExcludeForwardModel(String output){
+        boolean isForwardModel = false;
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            if(element.getFileName().equals("MarioForwardModel.java")){
+                isForwardModel = true;
+            }
+        }
+        if(!isForwardModel){
+            System.out.println("--- Log with trace ---");
+            System.out.println(output);
+            System.out.println("An event occurred.");
+            for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+                System.out.println("\tat " + element);
+            }
+            System.out.println("--------------------");
+        }
+    }
+
     @Override
     public void update() {
+//        PrintExcludeForwardModel("update");
         if (!this.alive) {
             return;
         }
@@ -320,7 +342,7 @@ public class Mario extends MarioSprite {
         canShoot = !actions[MarioActions.SPEED.getValue()];
 
         mayJump = onGround && !actions[MarioActions.JUMP.getValue()];
-
+//        System.out.printf("may Jump %b %b %b\n", mayJump, onGround, actions[MarioActions.JUMP.getValue()]);
         if (Math.abs(xa) < 0.5f) {
             xa = 0;
         }

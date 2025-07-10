@@ -349,7 +349,7 @@ public class MarioWorld {
         for (int x = (int) cameraX / 16 - 1; x <= (int) (cameraX + MarioGame.width) / 16 + 1; x++) {
 
             int dir = 0;
-
+            System.out.printf("%d, %f\n", x * 16 + 8, mario.x);
             if (x * 16 + 8 > mario.x + 16)
                 dir = -1;
             else if(x * 16 + 8 < mario.x + 16)
@@ -387,6 +387,7 @@ public class MarioWorld {
                 if (dir != 0) {
                     // if features.contains(TileFeature.SPAWNER), an optimized way
                     if(this.currentTick % 100 == 0 && this.level.getBlock(x, y) == 3){
+//                        System.out.println(dir);
                         addSprite(new BulletBill(this.visuals, x * 16 + 8 + dir * 8, y * 16 + 15, dir));
                     }
                 }
